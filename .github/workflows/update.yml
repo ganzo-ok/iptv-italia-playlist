@@ -2,12 +2,11 @@ name: Aggiorna Playlist IPTV
 
 on:
   schedule:
-    # Ogni giorno alle 03:00 UTC (04:00/05:00 in Italia)
     - cron: "0 3 * * *"
-  workflow_dispatch:  # Permette l'esecuzione manuale
+  workflow_dispatch:
 
 permissions:
-  contents: write  # Necessario per salvare il file aggiornato
+  contents: write
 
 jobs:
   update:
@@ -19,6 +18,10 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
+      # 👇 NUOVO PASSAGGIO: Installa FFmpeg (che contiene ffprobe)
+      - name: Installa FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Esegui filtro playlist
         run: python filter_playlist.py
